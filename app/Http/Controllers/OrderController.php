@@ -46,23 +46,24 @@ class OrderController extends Controller
         
         $get_order_id = DB::table('orders')->insertGetId($orders);
         
-        $item = $request->number_of_item;
+        $item = 0; //= $request->number_of_item;
         $order_details = array();
 
-        for ($i=0; $i < $item; $i++) { 
+        //for ($i=0; $i < $item; $i++) { 
+            $i=0;
             $order_details['order_id'] = $get_order_id;
             $order_details['product_id'] = $request->product_id[$i];
             $order_details['unit_price'] = $request->unit_price[$i];
             $order_details['quantity'] = $request->quantity[$i];
 
-            $order_status = DB::table('order_details')->insert($order_details);
-        }
+            DB::table('order_details')->insertGetId($order_details);
+        //}
         
 
-        if($order_status){
-            return response()->json('Congrats!');
-        }
-        return response()->json('Sorry!');
+        
+        return response()->json('Congrats! Your Order done.');
+        
+        
         
     }
 
@@ -76,11 +77,11 @@ class OrderController extends Controller
     {
         //$order_id = $order->order_id;
 
-        DB::table('order_details')
-            ->join('orders')
-            ->select('order_details.*')
-            ->where('order_details.order_id'='orders.order_id')
-            ->get();
+        DB::table('order_details')->get();
+            // ->join('orders')
+            // ->select('order_details.*')
+            // ->where('order_details.order_id'='orders.order_id')
+            // ->get();
 
     }
 
