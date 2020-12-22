@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Order;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class OrderController extends Controller
 {
@@ -36,8 +37,33 @@ class OrderController extends Controller
      */
     public function store(Request $request)
     {
-        $order = Order::create($request->all());
-        return response()->json($order);
+        //dd($request->all());
+        $orders = array(); //Order::create($request->all());
+
+        $orders['customer_id'] = $request->customer_id;
+        $orders['total_quantity'] = $request->total_quantity;
+        $orders['total_cost'] = $request->total_cost;
+        
+        $get_order_id = DB::table('orders')->insertGetId($orders);
+        
+        $item = $request->number_of_item;
+        $order_details = array();
+
+        for ($i=0; $i < $item; $i++) { 
+            $order_details['order_id'] = $get_order_id;
+            $order_details['product_id'] = $request->product_id[$i];
+            $order_details['unit_price'] = $request->unit_price[$i];
+            $order_details['quantity'] = $request->quantity[$i];
+
+            $order_status = DB::table('order_details')->insert($order_details);
+        }
+        
+
+        if($order_status){
+            return response()->json('Congrats!');
+        }
+        return response()->json('Sorry!');
+        
     }
 
     /**
@@ -48,7 +74,14 @@ class OrderController extends Controller
      */
     public function show(Order $order)
     {
-        //
+        //$order_id = $order->order_id;
+
+        DB::table('order_details')
+            ->join('orders')
+            ->select('order_details.*')
+            ->where('order_details.order_id'='orders.order_id')
+            ->get();
+
     }
 
     /**

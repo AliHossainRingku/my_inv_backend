@@ -9,16 +9,22 @@
 	<h1>Add a new order</h1>
 	    <form action="{{URL::to('/api/orders')}}" method="post" enctype="multipart/form-data">
         {{csrf_field()}}
-		Product Name: <input type="text" name="product_name" placeholder="Product Name"> <br/>
 
-		Customer Name: <input type="text" name="product_name" placeholder="Product Name"> <br/>
+		Customer ID: <input type="text" name="customer_id" placeholder="Customer ID"> <br/>
+		Total Quantity: <input type="text" name="total_quantity" placeholder="Quantity"> <br/>
+		Total Cost: <input type="text" name="total_cost" placeholder="Tota Cost"> <br/>
 
-		Product Name: <input type="text" name="product_name" placeholder="Product Name"> <br/>
+		Number of Item: <input type="text" name="number_of_item" placeholder="Number of item"><br><br/>
 
-		Unit Price: <input type="text" name="product_price" placeholder="Price"> <br/>
-		Quantity: <input type="text" name="quantity" placeholder="Quantity"> <br/>
-		Description: <input type="text" name="product_description" placeholder="Description"> <br/>
-		Image: <input type="file" name="product_image" placeholder="Image"> <br/>
+		<?php for($item=0; $item < 4; $item++) {  ?>
+		Product ID: <input type="text" name="product_id[]" placeholder="Product ID"> <br/>
+		Unit Price: <input type="text" name="unit_price[]" placeholder="Unit Price"> <br/>
+		Quantity: <input type="text" name="quantity[]" placeholder="Quantity"> <br/><br/>
+		<?php } ?>
+
+		
+
+
 		<button>Submit</button>
 	</form>
 

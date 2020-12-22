@@ -33,7 +33,7 @@ Route::get('/all-products', [ProductController::class, 'getAllProducts']);
 
 
 ///PRODUCTS MANAGE
-Route::get('/products', [ProductController::class, 'index']);
+Route::get('/products', [ProductController::class, 'index']);//->middleware('auth:sanctum');
 Route::get('/products/create', [ProductController::class, 'create']);
 Route::post('/products', [ProductController::class, 'store']);
 Route::put('/products/{id}/edit', [ProductController::class, 'edit']);
@@ -44,10 +44,19 @@ Route::delete('/products/{id}', [ProductController::class, 'destroy']);
 ///ORDER MANAGE
 Route::get('/orders', [OrderController::class, 'index']);
 Route::get('/orders/create', [OrderController::class, 'create']);
+Route::get('/orders/details/{id}', [OrderController::class, 'show']);
 Route::post('/orders', [OrderController::class, 'store']);
 Route::put('/orders/{id}/edit', [OrderController::class, 'edit']);
 Route::put('/orders/{id}', [OrderController::class, 'update']);
 Route::delete('/orders/{id}', [OrderController::class, 'destroy']);
+
+// ///ORDER DETAILS MANAGE
+// Route::get('/orders/details', [OrderController::class, 'index']);
+// Route::get('/orders/details/{id}', [OrderController::class, 'show']);
+// Route::post('/orders/details/{id}', [OrderController::class, 'store']);
+// Route::put('/orders/details/{id}/edit', [OrderController::class, 'edit']);
+// Route::put('/orders/details/{id}', [OrderController::class, 'update']);
+// Route::delete('/orders/details/{id}', [OrderController::class, 'destroy']);
 
 
 ///CART MANAGE
