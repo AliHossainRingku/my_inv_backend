@@ -45,17 +45,13 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 //Below all are under sanctum middleware//
 Route::middleware('auth:sanctum')->group(function () {
 
-	//Route::get('/all-product', [ProductController::class, 'index']);
-	Route::get('/all-products', [ProductController::class, 'getAllProducts']);
-
-
 	///PRODUCTS MANAGE
 	Route::get('/products', [ProductController::class, 'index']);
 	Route::get('/products/create', [ProductController::class, 'create']);
 	Route::post('/products', [ProductController::class, 'store']);
 	Route::put('/products/{id}/edit', [ProductController::class, 'edit']);
 	Route::put('/products/{id}', [ProductController::class, 'update']);
-	Route::delete('/products/{id}', [ProductController::class, 'destroy']);
+	Route::delete('/products/{product}', [ProductController::class, 'destroy']);
 
 
 	///ORDER MANAGE

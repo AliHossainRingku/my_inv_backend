@@ -19,9 +19,8 @@ class ProductController extends Controller
          //return response()->json($product);
         $products = DB::table('products')
             ->select('products.*')
-            ->orderBy('products.product_id')
-            ->paginate(20);
-        return $products;
+            ->get();
+        return response()->json($products);
         //return view('admin.product.manageProducts',['products'=>$products]);
     }
 

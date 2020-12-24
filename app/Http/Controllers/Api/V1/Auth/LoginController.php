@@ -32,10 +32,20 @@ class LoginController extends Controller
             //     'email' => ['The provided credentials are incorrect.'],
             // ]);
 
-            return "Sorry! Password does not match!";
+            return response([ 
+				"succes" => false,
+				"message" => "Sorry! Password does not match!"
+			]);
         }
 
-        return $user->createToken('my_custom_token')->plainTextToken;
+        return response([
+			"success" => true,
+			"access_token" => $user->createToken('AccessToken')->plainTextToken,
+			"type"	=> "Bearer",
+			"user"	=>	$user,
+			"message" => "Congrats! You are logged in successfully!"
+		]);
+         
         
     }
     

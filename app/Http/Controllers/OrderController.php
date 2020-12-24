@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Order;
+use App\Models\OrderDetails;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -15,8 +16,17 @@ class OrderController extends Controller
      */
     public function index()
     {
-        $order = Order::latest()->get();
-         return response()->json($order);
+        // $order = Order::latest()->get();
+        //  return response()->json($order);
+
+          $all_order_info = DB::table('orders')
+            ->join('order_details','orders.id','=','order_details.order_id')
+            ->join('products','products.id','=','order_details.product_id')
+            ->select('orders.*','order_details.*','products.*')
+            ->orderByDesc('orders.id','orders.updated_at')
+            ->get();
+
+          return response()->json($all_order_info);
     }
 
     /**
@@ -37,33 +47,24 @@ class OrderController extends Controller
      */
     public function store(Request $request)
     {
-        //dd($request->all());
-        $orders = array(); //Order::create($request->all());
+        $order = new Order;
+        $order->customer_id = $request->customer_id;
+        $order->total_quantity = $request->quantity;
+        $order->total_cost = $request->unit_price;
+        $order->save();
 
-        $orders['customer_id'] = $request->customer_id;
-        $orders['total_quantity'] = $request->total_quantity;
-        $orders['total_cost'] = $request->total_cost;
-        
-        $get_order_id = DB::table('orders')->insertGetId($orders);
-        
-        $item = 0; //= $request->number_of_item;
-        $order_details = array();
+        $numberOfCartItems = $request->cart_items;
 
-        //for ($i=0; $i < $item; $i++) { 
-            $i=0;
-            $order_details['order_id'] = $get_order_id;
-            $order_details['product_id'] = $request->product_id[$i];
-            $order_details['unit_price'] = $request->unit_price[$i];
-            $order_details['quantity'] = $request->quantity[$i];
-
-            DB::table('order_details')->insertGetId($order_details);
+        //for($i=0; $i<$order->cart_items; $i++){ 
+            $order_details = new OrderDetails;
+            $order_details->order_id = $order->id;
+            $order_details->product_id = $request->product_id;
+            $order_details->unit_price = $request->unit_price;
+            $order_details->quantity = $request->quantity;
+            $order_details->save();
         //}
-        
 
-        
-        return response()->json('Congrats! Your Order done.');
-        
-        
+        return response()->json($order);
         
     }
 
